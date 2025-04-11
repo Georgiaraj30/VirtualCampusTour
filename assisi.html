@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Virtual Tour - Stella Maris College Entrance</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <style>
+        /* General Styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #000;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        a-scene {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Sidebar Styling */
+        /* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 200px;
+    height: 60%;
+    background-color: rgba(3, 138, 252,0.8); /* Transparent blue */
+    z-index: 20; /* Ensure it stays above the scene */
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* Use thin scrollbar for Firefox */
+    scrollbar-color: rgba(255, 255, 255, 0.7) transparent; /* Custom scrollbar color for Firefox */
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px; /* Set scrollbar width for WebKit browsers */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.7); /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded scrollbar thumb */
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.9); /* Hover effect for scrollbar thumb */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent; /* Transparent scrollbar track */
+}
+
+
+        .sidebar a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .sidebar a img.sidebar-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5px;
+        }
+
+        .sidebar a:hover {
+            color: rgb(216, 190, 19);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a.active {
+            background-color: rgba(255, 193, 7, 1);
+            color: white;
+        }
+
+         /* Header Styling */
+        header {
+            background-color: white;
+            color: white;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 30;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+        }
+        header::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 7px;
+            background-color: #fcba03;
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+        }
+        header::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 7px; /* Adjust thickness */
+    background-color:#0388fc; /* Yellow color */
+    position: absolute;
+    top: 0px;
+    left: 0;
+}
+
+
+        .logo-container img {
+            height: 50px;
+        }
+        nav {
+            flex-grow: 1;
+            text-align: center;
+        }
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-links li {
+            margin: 0 15px;
+            position: relative;
+        }
+        .nav-links a {
+            color: #68b1f0;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        nav ul li ul {
+    position: absolute;
+    top: 100%; /* Ensures the dropdown appears just below the header */
+    left: 0;
+    z-index: 1000; /* Ensures it appears above other elements */
+    background-color: #fff; /* Match your design */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: rgba(3, 138, 252,0.8);
+            list-style: none;
+            padding: 10px 0;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            min-width: 180px;
+            max-height: 520px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .dropdown-menu li {
+            padding: 8px 20px;
+        }
+        .dropdown-menu li a {
+            color: white;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .share-btn {
+            background-color: #0388fc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 30px;
+        }
+        /* Scene Container */
+        a-scene {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .right-arrow{
+    position: fixed; /* Keeps it fixed on the screen */
+    bottom: 20px;    /* Adjust distance from the bottom */
+    right: 20px;     /* Adjust distance from the right */
+    z-index: 50;     /* Keeps it above other elements */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+}
+
+.straight{
+    position: fixed; /* Keeps it fixed on the screen */
+    bottom: 100px;    /* Adjust distance from the bottom */
+    left: 500px;     /* Adjust distance from the right */
+    z-index: 50;     /* Keeps it above other elements */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+}
+
+.arrow-text {
+    color: white;
+    font-size: 1rem;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+    margin-top: 5px;
+}
+
+
+    .audio-logo {
+            position: absolute;
+            
+            transform: translate(-50%, -50%);
+            width: 50px; /* Adjust size of the logo */
+            height: 50px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-left:1200px ;
+            padding-left: 20px;
+        }
+    
+
+/* Modal styling */
+#audioModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: block; /* Ensure it remains visible */
+        }
+
+        .btn {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .locations {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .sidebar {
+                width: 200px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="tour.html" class="nav-link">
+            <img src="images/gatelogo.jpg" alt="Entrance" class="sidebar-image">
+            ENTRANCE
+        </a>
+        <a href="mblock.html" class="nav-link">
+            <img src="images/mblocklogo.jpg" alt="mblock" class="sidebar-image">
+            M-BLOCK
+        </a>
+        <a href="ablock.html" class="nav-link">
+            <img src="images/ablocklogo.jpg" alt="ablock" class="sidebar-image">
+            A-BLOCK
+        </a>
+        <a href="hblock.html" class="nav-link">
+            <img src="images/hblocklogo.jpg" alt="hblock" class="sidebar-image">
+            H-BLOCK
+        </a>
+        <a href="bank.html" class="nav-link">
+            <img src="images/bank.jpg" alt="Bank" class="sidebar-image">
+            BANK
+        </a>
+        <a href="fblock.html" class="nav-link">
+            <img src="images/fblocklogo.jpg" alt="FBlock" class="sidebar-image">
+            F-BLOCK
+        </a>
+        
+        <a href="oat.html" class="nav-link">
+            <img src="images/oatlogo.jpg" alt="oat" class="sidebar-image">
+            OAT
+        </a>
+
+        <a href="cc.html" class="nav-link">
+            <img src="images/cclogo.jpg" alt="ccblock" class="sidebar-image">
+            CC-BLOCK
+        </a>
+        <a href="ncc.html" class="nav-link">
+            <img src="images/ncclogo.jpg" alt="NCC" class="sidebar-image">
+            NCC GROUND
+        </a>
+        <a href="hcblock.html" class="nav-link">
+            <img src="images/hcblock.jpg" alt="hclock" class="sidebar-image">
+            HC-BLOCK
+        </a>
+        <a href="pt.html" class="nav-link">
+            <img src="images/ptlogo.jpg" alt="pt" class="sidebar-image">
+            PET DEPT
+        </a>
+        <a href="ssblock.html" class="nav-link">
+            <img src="images/ssblock.jpg" alt="SSBlock" class="sidebar-image">
+            SS-BLOCK
+        </a>
+        <a href="bblock.html" class="nav-link">
+            <img src="images/bblocklogo.jpg" alt="bblock" class="sidebar-image">
+            B-BLOCK
+        </a>
+        <a href="greenhut.html" class="nav-link">
+            <img src="images/greenhutlogo.jpg" alt="greenhut" class="sidebar-image">
+            GREEN HUT
+        </a>
+        <a href="chapel.html" class="nav-link">
+            <img src="images/chapellogo.jpg" alt="chapel" class="sidebar-image">
+            CHAPEL
+        </a>
+    </div>
+
+       <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Stella Maris College Logo" class="logo">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#">Blocks ▼</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="mblock.html">M-Block</a></li>
+                            <li><a href="ablock.html">A-Block</a></li>
+                            <li><a href="hblock.html">H-Block</a></li>
+                            <li><a href="fblock.html">F-Block</a></li>
+                            <li><a href="cc.html">CC-Block</a></li>
+                            <li><a href="hc.html">HC-Block</a></li>
+                            <li><a href="ssblock.html">SS-Block</a></li>
+                            <li><a href="bblock.html">B-Block</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Landmarks ▼</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="tour.html">Entrance</a></li>
+                            <li><a href="library.html">Library</a></li>
+                            <li><a href="bank.html">Bank</a></li>
+                            <li><a href="oat.html">OAT</a></li>
+                            <li><a href="pt.html">PET</a></li>
+                            <li><a href="greenhut.html">Green Hut</a></li>
+                            <li><a href="whitehut.html">White Hut</a></li>
+                            <li><a href="chapel.html">Chapel</a></li>
+                        </ul>
+                    </li>
+
+                <li class="dropdown">
+                    <a href="#">Hostels ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="klemens.html">Klemens Hostel</a></li>
+                        <li><a href="assisi.html">Assisi Hostel</a></li>
+                        <li><a href="ourladys.html">Our Lady's Hostel</a></li>
+                        <li><a href="snehalaya.html">Snehalaya Hostel</a></li>
+                        <li><a href="nnblock.html">Nava Nirmana Hostel</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Sports ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="basketball.html">BasketBall Ground</a></li>
+                        <li><a href="volleyball.html">VolleyBall Ground</a></li>
+                        <li><a href="ncc.html">NCC Ground</a></li>
+                        <li><a href="pt.html">PET Dept</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="toggleMap()">Campus Map</a></li>
+            </ul>
+        </nav>
+        <button class="share-btn" onclick="shareTour()">Share Tour</button>
+    </header>
+
+       <!-- Modal for Audio Permission -->
+<div id="audioModal" style="display: block; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+background: white; padding: 20px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); border-radius: 10px; z-index: 200;">
+<p>Would you like to enable background audio?</p>
+<button class="btn" onclick="enableAudio(true)">Yes</button>
+<button class="btn" onclick="enableAudio(false)">No</button>
+</div>
+
+<!-- Audio Element -->
+<audio id="backgroundAudio" loop>
+<source src="audio/bg.mpeg" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<!-- Settings Button to Toggle Background Music -->
+<div style="position: fixed; bottom: 230px; right: -1px; z-index: 100;">
+<img id="musicToggle" 
+    src="images/audioon.png" 
+    alt="Toggle Music" 
+    title="BACKGROUD MUSIC" 
+    style="width: 100px; height: 100px; border-radius: 50%;cursor: pointer;" 
+    onclick="toggleMusic()">
+</div>
+
+ <!-- A-Frame Scene -->
+ <a-scene embedded>
+    <a-sky id="sky" src="images/asisi.jpg"></a-sky>
+    
+    <a-image id="right-arrow" class="clickable" navigate 
+        src="images/right-arrow.png" position="7 -1.5 -7" width="3" height="1">
+    </a-image>
+    <!-- Text Label Below Right Arrow -->
+<a-text value="Klemens Hostel" id="klemens" position="7 -2.2 -7" align="center" 
+width="10" color="white">
+</a-text>
+  
+    <a-image id="straight-arrow" class="clickable" navigate 
+        src="images/straight-arrow.png" position="-4 -2 -9" width="3.5" height="1">
+    </a-image>
+    <a-text value="Our Lady's Hostel" id="lady" position="-4 -2.8 -9" align="center" 
+    width="13" color="white" >
+    </a-text>
+   <!-- ASSISI Building (Assisi Block) -->
+<a-image id="ub-marker" src="images/location.png" position="0.2 2.7 -5" width="0.7" height="0.5"
+animation="property: material.opacity; from: 1; to: 0; dur: 1000; dir: alternate; loop: true"></a-image>
+
+<a-entity position="-0.5 3.5 -5">
+<a-plane id="color" width="5" height="0.5" color="#CEA303" position="1 2.9 -5" ></a-plane>
+<a-text id="text" value="ASSISI HOSTEL" align="center" width="10" color="white" position="1 2.9 -5" 
+   
+   animation="property: material.opacity; from: 1; to: 0; dur: 1000; dir: alternate; loop: true"></a-text>
+</a-entity>
+<a-entity id="camera" camera look-controls>
+<a-cursor id="cursor" raycaster="objects: .clickable" 
+          cursor="fuse: false; rayOrigin: mouse" visible="false">
+</a-cursor>
+     </a-entity>
+</a-scene>
+    
+
+<!-- Location Button -->
+<div style="position: fixed; bottom: 150px; right: 10px; z-index: 100;">
+    <img src="images/360.jpg" 
+         alt="Location" 
+         title="360 VIEW" 
+         style="width: 80px; height: 50px; border-radius: 50%;cursor: pointer;" 
+         onclick="rotateSky()">
+</div>
+
+    <!-- Campus Map Image Container (Initially Hidden) -->
+ <div id="campus-map-container" 
+ style="display: none; text-align: center;z-index: 101; position: relative;">
+ <img src="images/map.jpg" alt="Campus Map" class="campus-map" style="max-width:50%; margin-top: 6.8%; height:50%;">
+ <button onclick="toggleMap()" 
+        style="margin-right: 280px;  position: absolute;margin-top: 50px; top: 10px; right: 10px; padding: 10px 20px; font-size: 1.2rem; color: white; background: red; border: none; border-radius: 5px; cursor: pointer;">
+    X
+ </button>
+ </div>
+ 
+ 
+ <script>
+ 
+ // Function to toggle the visibility of the campus map when clicking the map logo
+ function toggleMap() {
+ var mapContainer = document.getElementById("campus-map-container");
+ // Toggle the display between none and block
+ if (mapContainer.style.display === "none" || mapContainer.style.display === "") {
+    mapContainer.style.display = "block"; // Show the map
+ } else {
+    mapContainer.style.display = "none"; // Hide the map
+ }
+ }
+ 
+        function shareTour() {
+        navigator.share({
+            title: 'Stella Maris College Virtual Tour',
+            url: 'http://127.0.0.1:5500/tour.html',
+        });
+    }
+
+document.addEventListener("DOMContentLoaded", function () {
+    let musicPref = localStorage.getItem("musicEnabled");
+
+    if (musicPref !== null) {
+        document.getElementById("audioModal").style.display = "none"; // Hide modal
+        applyMusicPreference(); // Apply stored preference
+    } else {
+        document.getElementById("audioModal").style.display = "block"; // Show modal
+    }
+});
+
+function enableAudio(play) {
+    let audio = document.getElementById("backgroundAudio");
+
+    if (play) {
+        localStorage.setItem("musicEnabled", "true"); 
+        audio.play().catch(error => console.error("Audio playback failed:", error));
+        document.getElementById("musicToggle").src = "images/audioon.png";
+    } else {
+        localStorage.setItem("musicEnabled", "false");
+        document.getElementById("musicToggle").src = "images/audiooff.png";
+    }
+
+    document.getElementById("audioModal").style.display = "none"; // Hide modal after choice
+}
+
+function toggleMusic() {
+    let audio = document.getElementById("backgroundAudio");
+    let musicButton = document.getElementById("musicToggle");
+
+    if (audio.paused) {
+        audio.play();
+        localStorage.setItem("musicEnabled", "true"); // Save preference
+        musicButton.src = "images/audioon.png";
+    } else {
+        audio.pause();
+        localStorage.setItem("musicEnabled", "false"); // Save preference
+        musicButton.src = "images/audiooff.png";
+    }
+}
+
+function applyMusicPreference() {
+    let audio = document.getElementById("backgroundAudio");
+    let musicButton = document.getElementById("musicToggle");
+    let musicEnabled = localStorage.getItem("musicEnabled");
+
+    if (musicEnabled === "true") {
+        audio.play();
+        musicButton.src = "images/audioon.png";
+    } else {
+        audio.pause();
+        musicButton.src = "images/audiooff.png";
+    }
+}
+
+// Apply music preference when the page loads
+window.onload = applyMusicPreference;
+
+
+
+
+
+
+
+
+AFRAME.registerComponent('hover-effect', {
+    init: function () {
+        this.el.addEventListener('mouseenter', () => {
+            document.querySelector('#cursor').setAttribute('material', 'color', 'yellow');
+        });
+        this.el.addEventListener('mouseleave', () => {
+            document.querySelector('#cursor').setAttribute('material', 'color', 'white');
+        });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const rightArrow = document.getElementById('right-arrow');
+    const straightArrow = document.getElementById('straight-arrow');
+    
+    const leftArrow = document.getElementById('left-arrow');
+    rightArrow.addEventListener('click', function () {
+        window.location.href = 'klemens.html';
+    });
+    straightArrow.addEventListener('click', function () {
+        window.location.href = 'ourladys.html';
+    });
+    
+});
+
+    
+
+        function showMap() {
+        document.getElementById('mapOverlay').style.display = 'block';
+    }
+
+    function hideMap() {
+        document.getElementById('mapOverlay').style.display = 'none';
+    }
+
+
+
+   
+
+    function showMap() {
+        document.getElementById('mapOverlay').style.display = 'block';
+    }
+
+    function hideMap() {
+        document.getElementById('mapOverlay').style.display = 'none';
+    }
+
+    
+    let isRotating = false; // Track rotation state
+let currentRotation = 0; // Track the current rotation angle (in degrees)
+
+function rotateSky() {
+    if (isRotating) return; // Prevent multiple clicks during rotation
+    isRotating = true;
+
+    const sky = document.getElementById('sky');
+    const rightArrow = document.getElementById('right-arrow');
+    const klemens=document.getElementById('klemens');
+    const straightArrow = document.getElementById('straight-arrow');
+    const lady=document.getElementById('lady');
+    const location=document.getElementById('ub-marker');
+    const loctext=document.getElementById('text');
+    const back=document.getElementById('color');
+    // Hide arrows before rotation starts
+    rightArrow.setAttribute('visible', 'false');
+    klemens.setAttribute('visible','false');
+    straightArrow.setAttribute('visible', 'false');
+    lady.setAttribute('visible', 'false');
+    location.setAttribute('visible', 'false');
+    loctext.setAttribute('visible', 'false');
+    back.setAttribute('visible', 'false');
+    
+    // Update current rotation angle
+    currentRotation += 360;
+
+    // Apply rotation animation
+    sky.setAttribute('animation', {
+        property: 'rotation',
+        to: `0 ${currentRotation} 0`, // Rotate by 360 degrees
+        dur: 20000,  // Duration for one full rotation
+        easing: 'linear'
+    });
+
+    // Restore arrows after rotation completes
+    setTimeout(() => {
+        sky.removeAttribute('animation'); // Remove animation to keep it static
+        isRotating = false; // Reset flag to allow future rotations
+        rightArrow.setAttribute('visible', 'true'); // Show arrows again
+        klemens.setAttribute('visible', 'true'); // Show arrows again
+        straightArrow.setAttribute('visible', 'true');
+        lady.setAttribute('visible', 'true'); 
+        location.setAttribute('visible', 'true');
+        loctext.setAttribute('visible', 'true');
+        back.setAttribute('visible', 'true');
+    }, 20000); // Match animation duration
+}
+
+    </script>
+
+</body>
+</html>
