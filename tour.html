@@ -182,7 +182,7 @@
             z-index: 1;
         }
         .right-arrow{
-        
+
     position: fixed; 
     bottom: 20px;    
     right: 20px;     
@@ -273,9 +273,21 @@
         align-items: flex-start;
         padding: 10px;
     }
+    .logo-container img {
+        height: 35px;
+    }
     .nav-links {
         flex-direction: column;
         align-items: flex-start;
+        gap: 10px;
+        width: 100%;
+    }
+    .nav-links li {
+        margin: 5px 0;
+    }
+    .share-btn {
+        align-self: flex-end;
+        margin-top: 10px;
     }
     .right-arrow, .straight {
         left: 10px !important;
@@ -296,6 +308,21 @@
     .audio-logo {
         margin-left: 90%;
     }
+    header {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+    .logo-container img {
+        height: 40px;
+    }
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
 }
 
 /* Small laptops (769px - 1024px) */
@@ -306,12 +333,36 @@
     .audio-logo {
         margin-left: 95%;
     }
+    header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 30px;
+    }
+    .logo-container img {
+        height: 45px;
+    }
+    .nav-links {
+        gap: 20px;
+    }
 }
 
 /* Desktops (1025px and up) */
 @media (min-width: 1025px) {
     .sidebar {
         width: 200px;
+    }
+    header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 40px;
+    }
+    .logo-container img {
+        height: 50px;
+    }
+    .nav-links {
+        gap: 25px;
     }
 }
 
