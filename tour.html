@@ -247,6 +247,73 @@
         .btn:hover {
             background-color: #0056b3;
         }
+
+        /* Mobile devices (max-width: 480px) */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100px;
+        height: 50%;
+    }
+    .sidebar a {
+        font-size: 0.8rem;
+        padding: 5px;
+    }
+    .sidebar a img.sidebar-image {
+        width: 40px;
+        height: 40px;
+    }
+    .audio-logo {
+        width: 30px;
+        height: 30px;
+        margin-left: 80%;
+    }
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .right-arrow, .straight {
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px;
+    }
+}
+
+/* Tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .sidebar {
+        width: 150px;
+    }
+    .sidebar a img.sidebar-image {
+        width: 50px;
+        height: 50px;
+    }
+    .audio-logo {
+        margin-left: 90%;
+    }
+}
+
+/* Small laptops (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar {
+        width: 180px;
+    }
+    .audio-logo {
+        margin-left: 95%;
+    }
+}
+
+/* Desktops (1025px and up) */
+@media (min-width: 1025px) {
+    .sidebar {
+        width: 200px;
+    }
+}
+
         
     </style>
 </head>
