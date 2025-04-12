@@ -687,13 +687,13 @@ if (mapContainer.style.display === "none" || mapContainer.style.display === "") 
    mapContainer.style.display = "none"; // Hide the map
 }
 }
-function shareTour() {
-        navigator.share({
-            title: 'Stella Maris College Virtual Tour',
-            url: 'http://127.0.0.1:5500/tour.html',
-        });
-    }
 
+function shareTour() {
+    navigator.share({
+        title: 'Stella Maris College Virtual Tour',
+        url: 'https://georgiaraj30.github.io/VirtualCampusTour/index.html',
+    });
+}
  function toggleDescription() {
         var infoBox = document.getElementById("library-info");
         if (infoBox.style.display === "none" || infoBox.style.display === "") {

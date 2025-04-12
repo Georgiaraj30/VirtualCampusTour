@@ -504,13 +504,12 @@ Your browser does not support the audio element.
     mapContainer.style.display = "none"; // Hide the map
  }
  }
- 
-function shareTour() {
-        navigator.share({
-            title: 'Stella Maris College Virtual Tour',
-            url: 'http://127.0.0.1:5500/tour.html',
-        });
-    }
+ function shareTour() {
+    navigator.share({
+        title: 'Stella Maris College Virtual Tour',
+        url: 'https://georgiaraj30.github.io/VirtualCampusTour/index.html',
+    });
+}
     
 document.addEventListener("DOMContentLoaded", function () {
     let musicPref = localStorage.getItem("musicEnabled");
